@@ -1,43 +1,92 @@
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import Button from "./components/Buton";
-import Navbar from "./components/Navbar";
-import React, { useEffect } from "react";
+import Card from "./components/Card";
 
 function App() {
-  useEffect(() => {}, []);
-  let varialt = "HELLO CSCC";
-  const [text, setText] = React.useState("Hello World");
-  const [array, setArray] = React.useState([1, 2, 3, 4, 5]);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products/")
+      .then((res) => res.json())
+      .then((json) => setData(json))
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  return (
-    <div className="App">
-      <Navbar />
-      <h1>{varialt}</h1>
-      <h1>{text}</h1>
-      <Button />
-      <button
-        onClick={() => {
-          varialt = "HELLO WORLD";
-          setText(text + "Hello");
-          console.log(varialt);
-          setArray(array.concat(array.length + 1));
-        }}
-      >
-        change
-      </button>
+  const data1 = [
+    {
+      title: "Products 1",
+      des: "This is Products 1",
+      func: () => alert("Products 1 clicked"),
+      image: "https://picsum.photos/100/100",
+      url: "/product3",
+    },
+    {
+      title: "Products 2",
+      des: "This is Products 2",
+      func: () => alert("Products 2 clicked"),
+      image: "https://picsum.photos/100/100",
+      url: "/product2",
+    },
+    {
+      title: "Products 3",
+      des: "This is Products 3",
+      func: () => alert("Products 3 clicked"),
+      image: "https://picsum.photos/100/100",
+      url: "/product3",
+    },
+  ];
+  const [loggeding, setLoggeding] = useState(false);
 
-      <button
-        onClick={() => {
-          setText("Hello World");
-        }}
-      >
-        reset
-      </button>
-      {array.map((item, i) => (
-        <h1 key={i}>{item}</h1>
-      ))}
-    </div>
-  );
+  if (loggeding) {
+    return (
+      <div className="App">
+        <div>
+          <h1>Logged in</h1>
+        </div>
+        <div className="grid">
+          {data.map((item, index) => (
+            <>
+              <Card
+                url={item.url}
+                title={item.title}
+                des={item.des}
+                onClick={item.func}
+                image={item.image}
+                key={index + "card"}
+              />
+              {index + 1 !== data.length && <hr />}
+            </>
+          ))}
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <button
+          onClick={() => {
+            setLoggeding(true);
+          }}
+        >
+          login
+        </button>
+        {data.map((item, index) => (
+          <>
+            <Card
+              url={item.url}
+              title={item.title}
+              des={item.des}
+              onClick={item.func}
+              image={item.image}
+              key={index + "card"}
+            />
+            {index + 1 !== data.length && <hr />}
+          </>
+        ))}
+      </div>
+    );
+  }
 }
 
 export default App;
